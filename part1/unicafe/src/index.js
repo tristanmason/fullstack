@@ -12,7 +12,14 @@ const Button = ({ onClick, text }) => (
 )
 
 const Statistic = ({ text, stat }) => (
-    <p><strong>{text}:</strong> {stat}</p>
+    <tr>
+        <td>
+            {text} 
+        </td>
+        <td>
+            {stat}
+        </td>
+    </tr>
 )
 
 const Statistics = ({good, neutral, bad, allFeedback}) => {
@@ -25,14 +32,16 @@ const Statistics = ({good, neutral, bad, allFeedback}) => {
 
     if (allFeedback.length > 0) {
         return (
-            <>
-                <Statistic text="Good" stat={good} />
-                <Statistic text="Neutral" stat={neutral} />
-                <Statistic text="Bad" stat={bad} />
-                <Statistic text="All" stat={allFeedback.length} />
-                <Statistic text="Average" stat={average(allFeedback)} />
-                <Statistic text="Positive" stat={percentPositive(good, allFeedback.length)} />
-            </>
+            <table>
+                <tbody>
+                    <Statistic text="Good" stat={good} />
+                    <Statistic text="Neutral" stat={neutral} />
+                    <Statistic text="Bad" stat={bad} />
+                    <Statistic text="All" stat={allFeedback.length} />
+                    <Statistic text="Average" stat={average(allFeedback)} />
+                    <Statistic text="Positive" stat={percentPositive(good, allFeedback.length)} />
+                </tbody>
+            </table>
         )
     } else {
         return (
