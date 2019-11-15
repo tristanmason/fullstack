@@ -2,10 +2,20 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css';
 
+const Header = ({ title }) =>
+    <h1>{title}</h1>
+
 const Button = ({ onClick, text }) => (
     <button onClick={onClick}>
         {text}
     </button>
+)
+
+const Anecdote = ({ anecdotes, selected, votes }) => (
+    <p>
+        {anecdotes[selected]}<br/>
+        has {votes[selected]} votes
+    </p>
 )
 
 const App = (props) => {
@@ -27,12 +37,18 @@ const App = (props) => {
         setVotes(votesCopy)
     }
 
+    const mostVotes = (votesArray) =>
+        votesArray.indexOf(Math.max(...votesArray));
+
     return (
         <div>
-            <p>{props.anecdotes[selected]}</p>
-            <p>has {votes[selected]} votes</p>
+            <Header title="Anecdote of the Day" />
+            <Anecdote anecdotes={props.anecdotes} selected={selected} votes={votes} />
             <Button onClick={handleVoteClick} text="Vote" />
             <Button onClick={handleNextClick} text="Next Anecdote" />
+
+            <Header title="Anecdote with the Most Votes" />
+            <Anecdote anecdotes={props.anecdotes} selected={mostVotes(votes)} votes={votes} />
         </div>
     )
 }
