@@ -28,6 +28,7 @@ const Content = ({parts}) => {
     return (
         <div>
             {rows()}
+            <Sum parts={parts} />
         </div>
     )
 }
@@ -37,6 +38,15 @@ const Part = ({name, exercises}) => {
         <p>
             {name} {exercises}
         </p>
+    )
+}
+
+const Sum = ({parts}) => {
+
+    const total = parts.reduce((s, p) => s + p.exercises, 0)
+
+    return (
+       <strong>Total of {total} exercises</strong>
     )
 }
 
