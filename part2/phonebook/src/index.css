@@ -19,7 +19,7 @@ code {
   background: #FFD151;
   height: 100vh;
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   align-items: center;
   text-align: center;
 }
