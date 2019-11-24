@@ -2,15 +2,16 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', id: 'Arto Hellas' },
-    { name: 'Ada Lovelace', id: 'Ada Lovelace' }
+    { name: 'Arto Hellas', phone: '040-1234567' },
+    { name: 'Ada Lovelace', phone: '044-7654321' }
   ])
   const [newName, setNewName] = useState('')
+  const [newPhone, setNewPhone] = useState('')
 
   const Person = ({ person }) => {
     return (
       <tr>
-        <td>{person.name}</td>
+        <td>{person.name} {person.phone}</td>
       </tr>
     )
   }
@@ -27,15 +28,16 @@ const App = () => {
 
     const personObject = {
       name: newName,
-      id: newName
+      phone: newPhone
     }
 
-    if (persons.find(person => (person.id === personObject.id)))
+    if (persons.find(person => (person.name === personObject.name)))
     {
       alert(`${newName} has already been added to your phonebook`)
     } else {
       setPersons(persons.concat(personObject))
       setNewName('')
+      setNewPhone('')
     }
   }
 
@@ -43,19 +45,35 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const handlePhoneChange = (event) => {
+    setNewPhone(event.target.value)
+  }
+
   return (
     <div className="wrapper">
       <h1>Phonebook</h1>
       <form onSubmit={addName}>
         <div className="form-group">
-          <label htmlFor="addNameInput">
-            Name
-          </label>
-          <input
-            name="addNameInput"
-            value={newName}
-            onChange={handleNameChange}
-          />
+          <p>
+            <label htmlFor="addNameInput">
+              Name
+            </label>
+            <input
+              name="addNameInput"
+              value={newName}
+              onChange={handleNameChange}
+            />
+          </p>
+          <p>
+            <label htmlFor="addPhoneInput">
+              Phone
+            </label>
+            <input
+              name="addPhoneInput"
+              value={newPhone}
+              onChange={handlePhoneChange}
+            />
+          </p>
         </div>
         <div>
           <button type="submit">Add</button>
@@ -67,8 +85,6 @@ const App = () => {
           {rows()}
         </tbody>
       </table>
-      
-      <p>debug: {newName}</p>
     </div>
   )
 }
