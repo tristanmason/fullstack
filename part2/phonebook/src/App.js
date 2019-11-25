@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = ({ searchTerms, handleSearchChange }) => {
   return (
@@ -79,15 +80,21 @@ const Person = ({ person }) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '040-1234567' },
-    { name: 'Ada Lovelace', phone: '044-7654321' },
-    { name: 'Codey McCodeface', phone: '123-456-7890'},
-    { name: 'Foo Foobarsson', phone: '441-555-8967' },
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchTerms, setSearchTerms] = useState('')
+
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  console.log('render', persons.length, 'persons')
 
   const filteredPersons = searchTerms
     ? persons.filter(person => (new RegExp(searchTerms, 'i').test(person.name)))
