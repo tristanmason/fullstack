@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.wrapper {
+  padding: 1.5vw 3vw;
+}
+
+img.flag {
+  width: 150px;
+}
