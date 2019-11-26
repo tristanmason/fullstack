@@ -23,11 +23,17 @@ const Filter = ({ searchTerms, handleSearchChange }) => {
 
 const Country = ({ country }) => {
   return (
-    <div>
+    <span className="countryName">
       {country.name}
-    </div>
+    </span>
   )
 }
+
+const Button = ({ onClick, text, country }) => (
+  <button onClick={onClick} data-country={country}>
+    {text}
+  </button>
+)
 
 const Info = ({ countryInfo }) => {
   const languages = () => {
@@ -60,7 +66,8 @@ const Info = ({ countryInfo }) => {
   )
 }
 
-const Countries = ({ filteredCountries }) => {
+const Countries = ({ filteredCountries, handleShowClick }) => {
+
   const rows = () => {
     if (filteredCountries.length === 0) {
 
@@ -80,13 +87,18 @@ const Countries = ({ filteredCountries }) => {
     
       return (
         filteredCountries.map(country =>
-          <Country
-            key={country.name}
-            country={country}
-          />
+          <div className="result" key={country.name}>
+            <Country
+              country={country}
+            />
+            <Button
+              onClick={handleShowClick}
+              text="Show"
+              country={country.name}
+            />
+          </div>
         )
       )
-    
     }
   }
 
@@ -117,13 +129,17 @@ const App = () => {
     setSearchTerms(event.target.value)
   }
 
+  const handleShowClick = (event) => {
+    setSearchTerms(event.target.getAttribute('data-country'))
+  }
+
   return (
     <div className="wrapper">
       <h1>Country Info</h1>
 
       <Filter searchTerms={searchTerms} handleSearchChange={handleSearchChange} />
 
-      <Countries filteredCountries={filteredCountries} />
+      <Countries filteredCountries={filteredCountries} handleShowClick={handleShowClick} />
 
     </div>
   )

@@ -16,6 +16,14 @@ code {
   padding: 1.5vw 3vw;
 }
 
+.result {
+  padding: 1vw 0;
+}
+
+.countryName {
+  margin-right: 10px;
+}
+
 img.flag {
   width: 150px;
 }
