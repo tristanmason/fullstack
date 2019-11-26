@@ -16,6 +16,11 @@ code {
   padding: 1.5vw 3vw;
 }
 
+label {
+  font-weight: 700;
+  margin-right: 10px;
+}
+
 .result {
   padding: 1vw 0;
 }
