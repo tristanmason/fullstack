@@ -131,7 +131,7 @@ const App = () => {
 
   const handleDeleteClick = (event) => {
     let deleteConfirm = window.confirm(`Delete ${event.target.dataset.name}?`)
-    const id = event.target.dataset.id
+    const id = parseInt(event.target.dataset.id)
     if (deleteConfirm) {
       personService
         .destroy(id)
