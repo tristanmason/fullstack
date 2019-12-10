@@ -17,7 +17,7 @@ code {
 .wrapper {
   padding: 2vw;
   background: #FFD151;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;

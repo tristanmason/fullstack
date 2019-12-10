@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const Filter = ({ searchTerms, handleSearchChange }) => {
   return (
@@ -54,11 +54,12 @@ const PersonForm = ({ addName, newName, newPhone, handleNameChange, handlePhoneC
   )
 }
 
-const Persons = ({filteredPersons}) => {
+const Persons = ({filteredPersons, handleDeleteClick}) => {
   const rows = () => filteredPersons.map(person =>
     <Person
-      key={person.name}
+      key={person.id}
       person={person}
+      onDelete={handleDeleteClick}
     />
   )
 
@@ -71,10 +72,10 @@ const Persons = ({filteredPersons}) => {
   )
 }
 
-const Person = ({ person }) => {
+const Person = ({ person, onDelete }) => {
   return (
     <tr>
-      <td>{person.name} {person.phone}</td>
+      <td>{person.name} {person.phone} <button data-name={person.name} data-id={person.id} onClick={onDelete}>Delete</button></td>
     </tr>
   )
 }
@@ -86,15 +87,10 @@ const App = () => {
   const [searchTerms, setSearchTerms] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personService
+      .getAll()
+      .then(initialPersons => setPersons(initialPersons))
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const filteredPersons = searchTerms
     ? persons.filter(person => (new RegExp(searchTerms, 'i').test(person.name)))
@@ -111,9 +107,13 @@ const App = () => {
     if (persons.find(person => (person.name === personObject.name))) {
       alert(`${newName} has already been added to your phonebook`)
     } else {
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewPhone('')
+      personService
+      .create(personObject)
+      .then(data => {
+        setPersons(persons.concat(data))
+        setNewName('')
+        setNewPhone('')
+      })
     }
   }
 
@@ -127,6 +127,16 @@ const App = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerms(event.target.value)
+  }
+
+  const handleDeleteClick = (event) => {
+    let deleteConfirm = window.confirm(`Delete ${event.target.dataset.name}?`)
+    const id = event.target.dataset.id
+    if (deleteConfirm) {
+      personService
+        .destroy(id)
+        .then( setPersons(persons.filter(p => p.id !== id)) )
+    }
   }
 
   return (
@@ -147,7 +157,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} handleDeleteClick={handleDeleteClick} />
     </div>
   )
 }
