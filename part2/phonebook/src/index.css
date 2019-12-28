@@ -60,3 +60,15 @@ button {
   font-weight: 700;
   cursor: pointer;
 }
+
+.success {
+  border: 3px solid green;
+  border-radius: 6px;
+  padding: 10px 20px;
+}
+
+.error {
+  border: 3px solid red;
+  border-radius: 6px;
+  padding: 10px 20px;
+}

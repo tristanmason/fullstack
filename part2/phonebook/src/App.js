@@ -80,11 +80,24 @@ const Person = ({ person, onDelete }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={message.type}>
+      {message.text}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [searchTerms, setSearchTerms] = useState('')
+  const [notification, setNotification] = useState([])
 
   useEffect(() => {
     personService
@@ -113,6 +126,25 @@ const App = () => {
           .update(found.id, personObject)
           .then(returnedPerson => {
               setPersons(persons.map(person => person.name !== newName ? person : returnedPerson))
+              const notificationObject = {
+                message: `${newName}'s information was updated successfully`,
+                type: 'success'
+              }
+              setNotification(notificationObject)
+              setTimeout(() => {
+                setNotification(null)
+              }, 5000)
+          })
+          .catch(error => {
+            const notificationObject = {
+              text: `${newName}'s information has already been removed from server`,
+              type: 'error'
+            }
+            setNotification(notificationObject)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+            setPersons(persons.filter(person => person.name !== newName))
           })
       }
     } else {
@@ -122,6 +154,14 @@ const App = () => {
         setPersons(persons.concat(data))
         setNewName('')
         setNewPhone('')
+        const notificationObject = {
+          text: `${newName} added successfully`,
+          type: 'success'
+        }
+        setNotification(notificationObject)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
     }
   }
@@ -141,16 +181,40 @@ const App = () => {
   const handleDeleteClick = (event) => {
     let deleteConfirm = window.confirm(`Delete ${event.target.dataset.name}?`)
     const id = parseInt(event.target.dataset.id)
+    const name = event.target.dataset.name
     if (deleteConfirm) {
       personService
         .destroy(id)
-        .then( setPersons(persons.filter(p => p.id !== id)) )
+        .then( () => {
+          setPersons(persons.filter(p => p.id !== id)) 
+          const notificationObject = {
+            text: `${name} deleted`,
+            type: 'success'
+          }
+          setNotification(notificationObject)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
+        .catch(error => {
+          const notificationObject = {
+            text: `${name}'s information has already been removed from server`,
+            type: 'error'
+          }
+          setNotification(notificationObject)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+          setPersons(persons.filter(person => person.name !== name))
+        })
     }
   }
 
   return (
     <div className="wrapper">
       <h1>Phonebook</h1>
+
+      <Notification message={notification} />
 
       <Filter searchTerms={searchTerms} handleSearchChange={handleSearchChange} />
       
