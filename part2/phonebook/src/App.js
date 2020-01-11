@@ -127,7 +127,7 @@ const App = () => {
           .then(returnedPerson => {
               setPersons(persons.map(person => person.name !== newName ? person : returnedPerson))
               const notificationObject = {
-                message: `${newName}'s information was updated successfully`,
+                text: `${newName}'s information was updated successfully`,
                 type: 'success'
               }
               setNotification(notificationObject)
@@ -180,7 +180,7 @@ const App = () => {
 
   const handleDeleteClick = (event) => {
     let deleteConfirm = window.confirm(`Delete ${event.target.dataset.name}?`)
-    const id = parseInt(event.target.dataset.id)
+    const id = event.target.dataset.id
     const name = event.target.dataset.name
     if (deleteConfirm) {
       personService
